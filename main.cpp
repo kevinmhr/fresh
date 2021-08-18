@@ -9,7 +9,7 @@ float angle=0.0,deltaAngle = 0.0,ratio;
 float x=0.0f,y=1.75f,z=5.0f;
 float lx=0.0f,ly=0.0f,lz=-1.0f;
 int deltaMove = 0,h,w;
-int font=(int)GLUT_BITMAP_8_BY_13;
+//int font=(int)GLUT_BITMAP_8_BY_13;
 static GLint walls_display_list;
 int bitmapHeight=13;
 
@@ -343,7 +343,7 @@ void resetPerspectiveProjection() {
  glMatrixMode(GL_MODELVIEW);
 }
 
-void renderBitmapString(float x, float y, void *font,char *string)
+/*void renderBitmapString(float x, float y, void *font,char *string)
 {
 
   char *c;
@@ -353,7 +353,7 @@ void renderBitmapString(float x, float y, void *font,char *string)
   for (c=string; *c != '\0'; c++) {
     glutBitmapCharacter(font, *c);
   }
-}
+}*/
 
 
 
@@ -400,9 +400,9 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  setOrthographicProjection();
  glPushMatrix();
  glLoadIdentity();
- renderBitmapString(30,15,(void *)font,"k");
- renderBitmapString(30,35,(void *)font,s);
- renderBitmapString(30,55,(void *)font,"Esc - Quit");
+ //renderBitmapString(30,15,(void *)font,"k");
+ //renderBitmapString(30,35,(void *)font,s);
+ //renderBitmapString(30,55,(void *)font,"Esc - Quit");
  glPopMatrix();
  resetPerspectiveProjection();
  
@@ -465,7 +465,7 @@ int main(int argc, char **argv)
  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
  glutInitWindowPosition(100,100);
  glutInitWindowSize(640,360);
- glutCreateWindow("ktech SpaceResonatorSystem");
+ glutCreateWindow("ktech ImageResonatorSystem");
 
  // register all callbacks
  initWindow();
