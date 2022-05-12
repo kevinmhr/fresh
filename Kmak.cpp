@@ -78,9 +78,7 @@ void default_scene()
 
 		GETPIX( charax[l]+x, charay[l]+y, charac[l] );
 
-	   //   charax[l]=charax[l]+0.1;
 
-	    //  charay[l]=charay[l]+0.1;
 
 	      charac[l]=charac[l+key]+1;
 
@@ -99,7 +97,7 @@ void clsc(){
 
 
     GETPIX (c,l,0);
-//    GETPIX (c,l,0);
+
 
 
     SETPIX( x+4, y+4,0 );
@@ -115,19 +113,15 @@ void clsc(){
 
 void colli(){
 	    null=0;
-       //	    if (targx= key-x) {
-	      //	GETPIX( x+320,y*200, charac[l] );
+    
 	  if ( y == ytrig)
 	   if (x == xtrig){
 	    null=200;
 					  co=co+1;
-				       //	  re=co;
+				     
 
-			      // targx=xtrig*2;
-
-				   // system(beep);
-					      //	 GETPIX(ballx[l]++ ,bally[l]++,bally[l]++  );
-					      //	c=c-1;l=l-1;
+			    
+					   
 
 
 }
@@ -142,7 +136,7 @@ if (null == 200){
 
 		  ytrig=ytrig-tan(key);
 			 xtrig=xtrig-tan(key);
-			 //   l=l+200;
+			
 			   }
 
 			 null=0;
@@ -159,7 +153,7 @@ void bullet()    {
 
 
 
-			// null=0;
+			
 
 			GETPIX( x+key, y, charac[l]+key );
 
@@ -216,14 +210,12 @@ k=k*z;
 x=x+o;
 y=y+r;
 colli();
-//null=0;
+
 scoreboard();
-//l++;
-//player();
+
 key++;
 bullet();
-//co=0;
-//put_pixels();       //	i=i+1;
+     
 
  default_scene();
 
@@ -239,17 +231,13 @@ bullet();
 	{
 	case 0x48: /* up arrow */
 	     r=r-1;
-	 //  y=y-5;
-	 // k=k+2;
+	
 	   z=z-1;
-	  // o=0;
-	  //strcpy(s, "up arrow");
+
 	break;
 	case 0x4d:
 
-	       //left
 
-      //	x=x+5;
 	      r=0;
 	      o=1;
 
@@ -259,7 +247,7 @@ bullet();
 	case 0x4b:
 
 		 r=0;
-       //	x=x-5;
+   
 		o=-1;
 	  break;
 
@@ -268,23 +256,19 @@ bullet();
 		k=k-2;
 		z=z++;
 		  r=1;
-       //	  y=y+5;
+      
 	  //strcpy(s, "down arrow");
 
 	   break;
 
 		case 0x52:
-		     //	 for (l=0;l<100;l++){
+		  
 
 		     ol=3;
 
-		      // charac[l]=0;
-		       //		 }
 				 break;
 	default: /* other special keys */
-	//    r=0;
-	  //  o=0;
-	 //
+
 	  sprintf(s, "00 %02x", kc);
 
 	}
