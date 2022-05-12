@@ -59,25 +59,18 @@ void put_pixels(){
 void default_scene()
 		       {
 	   for (l=0;l<40;l++){
-	     //  GETPIX( l*x, l*y, charac[l] );
-
-	    // SETPIX( x+key, y, null );
+	 
 	      SETPIX( charax[l] , charay[l]*1, charac[l]+null );
 
-
-	      //
 		GETPIX( charax[l]+x, charay[l]+y, charac[l+key] );
 
 
 	      charax[l]=charax[l]+0.1;
-	    //
-	 //
-	      charay[l]=charay[l]+0.1
-
-	      ;
-	     //
+	  
+	      charay[l]=charay[l]+0.1;
+	   
 	      charac[l]=charac[l++]+0.1;
-			    //  GETPIX( x+key, y,charac[l]  );
+			   
 			      }
 
 
@@ -90,11 +83,7 @@ void clsc(){
 
 				 SETPIX( x+1, y+1, 3 );
   for(c=0;c<320;c++){
-		      //	GETPIX( x+key, y, 3 );
-		     //	GETPIX( x+key-10, y+2, 3 );
-			     //	GETPIX( x+key, y,charac[l]  );
-			//   GETPIX( charax[l], charay[l-z-k], charac[l] );
-	     //	GETPIX( charax[l], charay[l], charac[l]+null );
+		    
     GETPIX (c,l,0);
 
     SETPIX( x+4, y+4, 0 );
@@ -128,9 +117,7 @@ void bullet()    {
 			 xtrig=re;
 			 ytrig=co;
 
-		       //	   re=re+1;
-			 //  co=co+1;
-		      // ol=0;
+		   
 			} }
 	ol=0;
 
@@ -165,14 +152,6 @@ if(y<10){y=10;}
  if (x<10){x=10;}
 if (z>0){z=0;}
 
-//if (x=xtrig&&y=ytrig){
-//SETPIX (x*key,y*key,key);
-
-//if (y= x){  printf("BOOM"); }				//  printf("Boom!");
-
-
-
-//if (l=x-3&l>150-k){ printf("kcycle");};
 
 
 bullet();
@@ -185,7 +164,7 @@ clsc();
 
 //player();
 key++;
-put_pixels();       //	i=i+1;
+put_pixels();       
 
  default_scene();
 
@@ -201,17 +180,15 @@ put_pixels();       //	i=i+1;
 	{
 	case 0x48: /* up arrow */
 	     r=r-1;
-	 //  y=y-5;
-	 // k=k+2;
+	
 	   z=z-1;
-	  // o=0;
-	  //strcpy(s, "up arrow");
+
 	break;
 	case 0x4d:
 
 	       //left
 
-      //	x=x+5;
+ 
 	      r=0;
 	      o=1;
 
@@ -221,7 +198,7 @@ put_pixels();       //	i=i+1;
 	case 0x4b:
 
 		 r=0;
-       //	x=x-5;
+      
 		o=-1;
 	  break;
 
@@ -230,23 +207,20 @@ put_pixels();       //	i=i+1;
 		k=k-2;
 		z=z++;
 		  r=1;
-       //	  y=y+5;
+     
 	  //strcpy(s, "down arrow");
 
 	   break;
 
 		case 0x52:
-		     //	 for (l=0;l<100;l++){
+		   
 
 		     ol=3;
 
-		      // charac[l]=0;
-		       //		 }
+		
 				 break;
 	default: /* other special keys */
-	//    r=0;
-	  //  o=0;
-	 //
+	
 	  sprintf(s, "00 %02x", kc);
 
 	}
