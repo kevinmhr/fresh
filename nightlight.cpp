@@ -4,17 +4,37 @@
 #include <string.h>
 //#include <cstdlib>
 //if you got error in exit() by compiler then does not incluede stdlib.h because //exit() is also defined in glut.h file.
+#define COS(X)   cos( (X) * 3.14159/180.0 )
+#define SIN(X)   sin( (X) * 3.14159/180.0 )
 
+#define RED 1
+#define WHITE 2
+#define CYAN 3
+
+GLboolean IndexMode = GL_FALSE;
+GLuint Ball;
+GLenum Mode;
+GLfloat Zrot = 0.0, Zstep = 180.0;
+GLfloat Xpos = 0.0, Ypos = 1.0;
+GLfloat Xvel = 2.0, Yvel = 0.0;
+GLfloat Xmin = -7.0, Xmax = 10.0;
+GLfloat Ymin = -7.8, Ymax = 10.0;
+GLfloat G = -9.8;
+float width; 
+float height;
+float aspect = (float) width / (float) height;
+ 
 float angle=0.0,deltaAngle = 0.0,ratio;
 float x=0.0f,y=1.75f,z=5.0f;
 float lx=0.0f,ly=0.0f,lz=-1.0f;
 int deltaMove = 0,h,w;
-int font=(int)GLUT_BITMAP_8_BY_13;
+void* font=GLUT_BITMAP_8_BY_13;
 static GLint walls_display_list;
 int bitmapHeight=13;
 int l;
 int m;
 int n;
+int qua;
 int frame,time,timebase=0;
 char s[30];
 
@@ -38,6 +58,61 @@ glEnable(GL_LIGHT0);
  
 
 
+ 
+}
+
+static GLuint 
+make_ball(void)
+{
+ 
+    GLuint list;
+  GLfloat a, b;
+  GLfloat da = 18.0, db = 18.0;
+  GLfloat radius = 1.8;
+  GLuint color;
+  GLfloat bx, by, bz;
+
+  list = glGenLists(1);
+
+  glNewList(list, GL_COMPILE);
+
+  color = 0;
+  for (a = -90.0; a + da <= 90.0; a += da) {
+
+    glBegin(GL_QUAD_STRIP);
+    for (b = 0.0; b <= 360.0; b += db) {
+
+      if (color) {
+	glIndexi(RED);
+        glColor3f(1, 0, 0);
+      } else {
+	glIndexi(WHITE);
+        glColor3f(1, 1, 1);
+      }
+
+      bx = radius * COS(b) * COS(a);
+      by = radius * SIN(b) * COS(a);
+      bz = radius * SIN(a);
+      glVertex3f(bx, by, bz);
+
+      bx = radius * COS(b) * COS(a + da);
+      by = radius * SIN(b) * COS(a + da);
+      bz = radius * SIN(a + da);
+      glVertex3f(bx, by, bz);
+
+      color = 1 - color;
+    }
+    glEnd();
+
+  }
+
+  glEndList();
+
+  return list;
+}
+static void 
+idle(void)
+{
  
 }
 void changeSize(int w1, int h1)
@@ -447,6 +522,11 @@ GLuint createDL() {
   for (int k=-2;k<2;k++) {
    glPushMatrix();
    glTranslatef(i*7.0,k*5,j * 7.0);
+      
+ 
+  glRotatef(Zrot, 0.0, 0.0, 1.0);
+ 
+   
   pyr();
    glCallList(wallsDL+1);
    glPopMatrix();
@@ -483,7 +563,7 @@ void orientMe(float ang) {
        x + lx,y + ly,z + lz,
     0.0f,1.0f,0.0f);
 
-  
+
 
 
 
@@ -514,7 +594,17 @@ void setOrthographicProjection() {
  // reset matrix
  glLoadIdentity();
  // set a 2D orthographic projection
- gluOrtho2D(0, w, 0, h);
+
+ 
+ 
+ 
+
+  
+ 
+ 
+
+ 
+ 
  // invert the y axis, down is positive
  glScalef(1, -1, 1);
  // mover the origin from the bottom left corner
@@ -532,26 +622,19 @@ void resetPerspectiveProjection() {
  glMatrixMode(GL_MODELVIEW);
 }
 
-void renderBitmapString(float x, float y, void *font,char *string)
-{
-
-  char *c;
-  // set position to start drawing fonts
-  glRasterPos2f(x, y);
-  // loop all the characters in the string
-  for (c=string; *c != '\0'; c++) {
-    glutBitmapCharacter(font, *c);
-  }
-}
 
 
 
 
 void renderScene(void) {
+    
+
+ 
+    
 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
- if (deltaMove)
-  moveMeFlat(deltaMove);
- if (deltaAngle) {
+ //if (deltaMove){
+  moveMeFlat(deltaMove) ;
+ //if (deltaAngle) {
   angle += deltaAngle;
   orientMe(angle);
  
@@ -559,33 +642,83 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
  
  
- }
+ 
 // Draw ground
 
-floors();
 
  
+
+  
+
+   static float vel0 = -100.0;
+  static double t0 = -1.;
+  double t, dt;
+ 
+  t = glutGet(GLUT_ELAPSED_TIME) / 300.;
+  
+
+  if (t0 < 0.)
+     t0 = t;
+  dt = t - t0;
+  t0 = t;
+
+  Zrot += Zstep*dt;
+
+  Xpos += Xvel*dt;
+  if (Xpos >= Xmax) {
+    Xpos = Xmax;
+    Xvel = -Xvel;
+    Zstep = -Zstep;
+  }
+  if (Xpos <= Xmin) {
+    Xpos = Xmin;
+    Xvel = -Xvel;
+    Zstep = -Zstep;
+  }
+  Ypos += Yvel*dt;
+  Yvel += G*dt;
+  if (Ypos < Ymin) {
+    Ypos = Ymin;
+    if (vel0 == -100.0)
+      vel0 = fabs(Yvel);
+    Yvel = vel0;
+  }
+  glutPostRedisplay();
+
 
 // Draw 36 Snow Men
 
-  glCallList(walls_display_list);
+
  
  frame++;
- time=glutGet(GLUT_ELAPSED_TIME);
- if (time - timebase > 1000) {
-  sprintf(s,"FPS:%4.2f",frame*1000.0/(time-timebase));
-  timebase = time;  
-  frame = 0;
- }
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL );
+
+
+
+  
+  
+  floors();
+
+  glCallList(walls_display_list);
+
+   glTranslatef(Xpos, Ypos, 0.0);
+ 
+  glRotatef(Zrot, 0.0, 0.0, 1.0);
+ 
+ 
+     glCallList(Ball);
+   
+ 
+ 
+ 
+ glPolygonMode(GL_FRONT_AND_BACK, GL_FILL );
 		//  glutPostRedisplay();
  glColor3f(0.0f,1.0f,1.0f);
  setOrthographicProjection();
  glPushMatrix();
  glLoadIdentity();
- renderBitmapString(30,15,(void *)font,"k");
- renderBitmapString(30,35,(void *)font,s);
- renderBitmapString(30,55,(void *)font,"Esc - Quit");
+ //renderBitmapString(30,15,font,"k");
+ //renderBitmapString(30,35,font,s);
+ ////renderBitmapString(30,55,font,"Esc - Quit");
  glPopMatrix();
  resetPerspectiveProjection();
  
@@ -653,7 +786,7 @@ int main(int argc, char **argv)
  glutInitWindowPosition(100,100);
  glutInitWindowSize(640,360);
  glutCreateWindow("ktech ImageResonatorSystem");
-
+ Ball = make_ball();
  // register all callbacks
  initWindow();
 
