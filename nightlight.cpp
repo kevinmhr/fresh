@@ -13,6 +13,7 @@
 
 GLboolean IndexMode = GL_FALSE;
 GLuint Ball;
+GLuint spheres;
 GLenum Mode;
 GLfloat Zrot = 0.0, Zstep = 180.0;
 GLfloat Xpos = 0.0, Ypos = 1.0;
@@ -30,6 +31,7 @@ float lx=0.0f,ly=0.0f,lz=-1.0f;
 int deltaMove = 0,h,w;
 void* font=GLUT_BITMAP_8_BY_13;
 static GLint walls_display_list;
+static GLint balls_display_list;
 int bitmapHeight=13;
 int l;
 int m;
@@ -68,7 +70,7 @@ make_ball(void)
     GLuint list;
   GLfloat a, b;
   GLfloat da = 18.0, db = 18.0;
-  GLfloat radius = 1.8;
+  GLfloat radius = 1.0;
   GLuint color;
   GLfloat bx, by, bz;
 
@@ -84,7 +86,7 @@ make_ball(void)
 
       if (color) {
 	glIndexi(RED);
-        glColor3f(1, 0, 0);
+        glColor3f(0, 1, 1);
       } else {
 	glIndexi(WHITE);
         glColor3f(1, 1, 1);
@@ -489,10 +491,39 @@ void drawsome() {
  glutSolidCone(20 ,20.0f,100,2);
 }
 
+GLuint BALLSDL(){
+    GLuint spheres;
+ spheres = glGenLists(1);
+  glNewList(spheres,GL_COMPILE);
+  
+  for(int i = -3; i < 3; i++)
+  for(int j=-2; j < 2; j++)
+  for (int k=-2;k<2;k++) {
+   glPushMatrix();
+   glTranslatef(i*7.0,k*5,j * 7.0);
+      
+  glColor3f(1.1f, 0.1f , 0.1f);
+   glutSolidSphere(1.40f,10,10);
+ 
+ 
+ 
 
+   glPopMatrix();
+
+  }
+ glEndList();
+    
+     return(spheres);
+    
+    
+    
+}
 
 GLuint createDL() {
 
+  
+ // Create the id for the list
+ 
 
 
  GLuint wallsDL;
@@ -504,7 +535,7 @@ GLuint createDL() {
   //drawSnowMan();
    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE );
  pyr();
-  glColor3f(0.1f, 0.1f , 0.1f);
+  glColor3f(1.1f, 0.1f , 0.1f);
   
   	// glutSolidCone(20  ,5.0f,20,2);
        glColor3f(1.4f, 2.1f , 0.1f);
@@ -524,7 +555,7 @@ GLuint createDL() {
    glTranslatef(i*7.0,k*5,j * 7.0);
       
  
-  glRotatef(Zrot, 0.0, 0.0, 1.0);
+ 
  
    
   pyr();
@@ -550,7 +581,7 @@ void initScene() {
 
  glEnable(GL_DEPTH_TEST);
  walls_display_list = createDL();
-
+ balls_display_list= BALLSDL();
 }
 
 void orientMe(float ang) {
@@ -654,7 +685,7 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   static double t0 = -1.;
   double t, dt;
  
-  t = glutGet(GLUT_ELAPSED_TIME) / 300.;
+  t = glutGet(GLUT_ELAPSED_TIME) / 2000.;
   
 
   if (t0 < 0.)
@@ -694,7 +725,25 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 
+   for(int i = -3; i < 3; i++)
+  for(int j=-2; j < 2; j++)
+  for (int k=-2;k<2;k++) {
+   glPushMatrix();
+   glTranslatef(i*Ypos+Xpos,k*Xpos+Ypos,j * 7.0);
+        
+ 
+  glRotatef(Zrot, 0.0, 0.0, 1.0);
+  glColor3f(1.1f, 0.1f , 0.1f);
+  // glutSolidSphere(1.40f,10,10);
   
+     glCallList(Ball);
+ 
+ 
+
+   glPopMatrix();
+
+  }
+     
   
   floors();
 
@@ -704,10 +753,11 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
   glRotatef(Zrot, 0.0, 0.0, 1.0);
  
- 
-     glCallList(Ball);
+
    
- 
+   
+     
+     //glCallList(balls_display_list);
  
  
  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL );
@@ -742,7 +792,9 @@ void pressKey(int key, int x, int y) {
   case GLUT_KEY_RIGHT : deltaAngle = 0.01f;break;
   case GLUT_KEY_UP : deltaMove = 1;break;
   case GLUT_KEY_DOWN : deltaMove = -1;break;
- 
+   case  GLUT_KEY_PAGE_UP    :  
+       y++;
+      break;
  
  
  }
@@ -753,6 +805,7 @@ void releaseKey(int key, int x, int y) {
 
  switch (key) {
   case GLUT_KEY_LEFT : if (deltaAngle < 0.0f)
+      
         deltaAngle = 0.0f;
        break;
   case GLUT_KEY_RIGHT : if (deltaAngle > 0.0f)
@@ -764,7 +817,9 @@ void releaseKey(int key, int x, int y) {
   case GLUT_KEY_DOWN : if (deltaMove < 0)
         deltaMove = 0;
        break;
- }
+
+       
+}
 }
 
 void initWindow() {
