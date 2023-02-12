@@ -535,14 +535,16 @@ GLuint createDL() {
   //drawSnowMan();
    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE );
  pyr();
-  glColor3f(1.1f, 0.1f , 0.1f);
+
   
   	// glutSolidCone(20  ,5.0f,20,2);
        glColor3f(1.4f, 2.1f , 0.1f);
        
  
    wall();
-  glutSolidSphere(1.40f,10,10);
+  
+     glColor3f(1.1f, 0.1f , 0.1f);
+   glutSolidSphere(1.40f,10,10);
  glEndList();
  // start list
  glNewList(wallsDL,GL_COMPILE);
@@ -718,8 +720,13 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 // Draw 36 Snow Men
-
-
+ 
+  glEnable(GL_BLEND);
+ 
+  
+ 
+  
+  glLineWidth(2.0);
  
  frame++;
 
@@ -733,7 +740,7 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
  
   glRotatef(Zrot, 0.0, 0.0, 1.0);
-  glColor3f(1.1f, 0.1f , 0.1f);
+ 
   // glutSolidSphere(1.40f,10,10);
   
      glCallList(Ball);
@@ -751,7 +758,7 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
    glTranslatef(Xpos, Ypos, 0.0);
  
-  glRotatef(Zrot, 0.0, 0.0, 1.0);
+ 
  
 
    
